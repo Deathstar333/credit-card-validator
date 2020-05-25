@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.wipro.app" />
+
+    <!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+    <!--        <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />-->
+    <!--        <property name="url" value="jdbc:derby://localhost:1527/db;create=true" />-->
+    <!--    </bean>-->
+
+    <jdbc:embedded-database id="dataSource" type="DERBY">
+        <jdbc:script location="classpath:sql/create-db.sql" />
+        <jdbc:script location="classpath:sql/insert-data.sql" />
+    </jdbc:embedded-database>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="com.wipro.app.model" />
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+</beans>
