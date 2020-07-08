@@ -22,6 +22,7 @@ public class CreditScoreDaoImpl {
     }
 
     public int getCount(String panNumber) {
+        panNumber = panNumber.toUpperCase();
         String hql = "select count(*) from CreditScore CS where CS.panNumber = :pan_number";
         Query query =  getSessionFactory().openSession().createQuery(hql);
         query.setParameter("pan_number", panNumber);
@@ -31,6 +32,7 @@ public class CreditScoreDaoImpl {
     }
 
     public double getCreditScoreByPanNumber(String panNumber) {
+        panNumber = panNumber.toUpperCase();
         String hql = "select creditScore from CreditScore CS where CS.panNumber = :pan_number";
         Query query = getSessionFactory().openSession().createQuery(hql);
         query.setParameter("pan_number", panNumber);
